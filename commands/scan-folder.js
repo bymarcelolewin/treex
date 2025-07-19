@@ -1,0 +1,163 @@
+//======================================
+// file: commands/scan-folder.js
+// version: 1.8
+// last updated: 06-04-2025
+//======================================
+
+require("module-alias/register");
+const fs = require("fs");
+const path = require("path");
+
+const ignoredNames = require("@ignored");
+const emojis = require("@emojis");
+
+const IGNORED_NAMES = new Set(ignoredNames);
+
+/**
+ * Recursively prints a directory tree structure with emojis and optional details
+ * @param {string} dirPath - The root folder to scan
+ * @param {string} prefix - Used internally for formatting
+ * @param {boolean} isRoot - Whether this is the initial (top-level) call
+ * @param {boolean} showDetails - Whether to show extra metadata like locked
+ * @param {Object} options - Additional behavior flags
+ * @param {boolean} options.collapsed - Show only the top-level entries
+ * @param {boolean} options.foldersOnly - Skip files, show only folders recursively
+ */
+function printTree(dirPath, prefix = "", isRoot = true, showDetails = false, options = {}) {
+  let entries;
+
+  try {
+    entries = fs.readdirSync(dirPath, { withFileTypes: true });
+  } catch (err) {
+    console.error(`Error reading ${dirPath}: ${err.message}`);
+    return;
+  }
+
+  entries = entries
+    .filter(entry => {
+      if (IGNORED_NAMES.has(entry.name)) return false;
+      if (options.foldersOnly && !entry.isDirectory()) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (a.isDirectory() && !b.isDirectory()) return -1;
+      if (!a.isDirectory() && b.isDirectory()) return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+  if (isRoot) {
+    const folderName = path.basename(path.resolve(dirPath));
+    console.log(`${emojis.folder} ${folderName}`);
+  }
+
+  entries.forEach((entry, index) => {
+    const isLast = index === entries.length - 1;
+    const isHidden = entry.name.startsWith(".");
+    const isFolder = entry.isDirectory();
+    const icon = isFolder
+      ? emojis.folder
+      : isHidden
+      ? emojis.hidden
+      : emojis.file;
+
+    let locked = "";
+    if (showDetails) {
+      const fullPath = path.join(dirPath, entry.name);
+      try {
+        fs.accessSync(fullPath, fs.constants.W_OK);
+      } catch {
+        locked = ` ${emojis.locked}`;
+      }
+    }
+
+    const line = `${prefix}${isLast ? "└──" : "├──"} ${icon} ${entry.name}${locked}`;
+    console.log(line);
+
+    const shouldRecurse = isFolder && !options.collapsed;
+
+    if (shouldRecurse) {
+      const nextPrefix = prefix + (isLast ? "    " : "│   ");
+      printTree(path.join(dirPath, entry.name), nextPrefix, false, showDetails, options);
+    }
+  });
+}
+
+/**
+ * Generates tree data structure for web interface
+ * @param {string} dirPath - The root folder to scan
+ * @param {Object} options - Additional behavior flags
+ * @returns {Object} Tree data structure with nested children
+ */
+function getTreeData(dirPath, options = {}) {
+  const showDetails = options.details || false;
+  
+  function buildTree(currentPath, isRoot = true) {
+    let entries;
+    
+    try {
+      entries = fs.readdirSync(currentPath, { withFileTypes: true });
+    } catch (err) {
+      return { error: `Error reading ${currentPath}: ${err.message}` };
+    }
+
+    entries = entries
+      .filter(entry => {
+        if (IGNORED_NAMES.has(entry.name)) return false;
+        if (options.foldersOnly && !entry.isDirectory()) return false;
+        return true;
+      })
+      .sort((a, b) => {
+        if (a.isDirectory() && !b.isDirectory()) return -1;
+        if (!a.isDirectory() && b.isDirectory()) return 1;
+        return a.name.localeCompare(b.name);
+      });
+
+    const result = {
+      name: isRoot ? path.basename(path.resolve(currentPath)) : path.basename(currentPath),
+      path: currentPath,
+      isDirectory: true,
+      isRoot,
+      children: []
+    };
+
+    entries.forEach(entry => {
+      const fullPath = path.join(currentPath, entry.name);
+      const isFolder = entry.isDirectory();
+      const isHidden = entry.name.startsWith(".");
+      
+      let locked = false;
+      if (showDetails) {
+        try {
+          fs.accessSync(fullPath, fs.constants.W_OK);
+        } catch {
+          locked = true;
+        }
+      }
+
+      const nodeData = {
+        name: entry.name,
+        path: fullPath,
+        isDirectory: isFolder,
+        isHidden,
+        locked,
+        icon: isFolder ? emojis.folder : (isHidden ? emojis.hidden : emojis.file)
+      };
+
+      if (isFolder && !options.collapsed) {
+        const childTree = buildTree(fullPath, false);
+        nodeData.children = childTree.children;
+      } else {
+        nodeData.children = [];
+      }
+
+      result.children.push(nodeData);
+    });
+
+    return result;
+  }
+
+  return buildTree(dirPath);
+}
+
+module.exports = printTree;
+module.exports.getTreeData = getTreeData;

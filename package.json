@@ -1,0 +1,23 @@
+{
+  "name": "treex",
+  "version": "0.0.1",
+  "description": "A cross-platform CLI to perform a variety of utilities",
+  "license": "MIT",
+  "author": "Marcelo Lewin",
+  "type": "commonjs",
+  "main": "bin/treex.js",
+  "bin": {
+    "treex": "./bin/treex.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "module-alias": "^2.2.3"
+  },
+  "_moduleAliases": {
+    "@ignored": "config/ignored-names.json",
+    "@emojis": "config/emojis.json"
+  }
+}
