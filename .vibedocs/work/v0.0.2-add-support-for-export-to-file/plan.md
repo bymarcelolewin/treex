@@ -1,14 +1,24 @@
 # v0.0.2 - Add Export to File Feature
 
+## Project Metadata
+| Field | Value |
+|-------|-------|
+| Version | v0.0.2 |
+| Dependencies | v0.0.1 (base treex functionality) |
+| Breaking Changes | No |
+
 ## Overview
 Add the ability to export treex output to various file formats, starting with Markdown support.
 
 ## Requirements
-- Export tree structure to files without console output
+- Export tree structure to files with suppressed console output
 - Support multiple export formats simultaneously (starting with Markdown)
 - Export multiple formats from single command
 - Automatic file extension handling per format
 - Preserve emoji icons in exported files
+- Never overwrite existing files - return "file already exists" error
+- Work with all existing flags (--collapsed, --folders-only, --details, etc.)
+- For multiple format exports, show results in "Completed" and "Failed" sections
 - Proper error handling for file operations
 
 ## CLI Design
@@ -34,6 +44,8 @@ treex --export-as txt --save-to simple-tree               # Creates simple-tree.
 - Parse comma-separated export types into array
 - Validate that both options are provided when exporting
 - Validate that all requested export types are supported
+- When exporting: suppress console output, only show export results
+- All existing flags (--collapsed, --folders-only, --details) work with export
 - Pass export configuration to scan-folder module
 
 ### 2. Export Module (`commands/export.js`)
@@ -48,15 +60,16 @@ treex --export-as txt --save-to simple-tree               # Creates simple-tree.
   - File permission issues
   - Invalid paths
   - Disk space problems
-  - File already exists (overwrite for each format)
+  - File already exists (do NOT overwrite, return error)
   - Partial failures (some formats succeed, others fail)
 
 ### 3. Scan-Folder Updates (`commands/scan-folder.js`)
-- Modify `printTree` function to support export mode
+- Create new `getTreeString` function for export mode
 - When exporting:
-  - Capture output instead of printing to console
+  - Generate formatted string instead of console output
   - Return formatted string for export module
-- Add export mode parameter to control behavior
+  - Respect all existing flags (--collapsed, --folders-only, --details)
+- Keep existing `printTree` function unchanged for normal console output
 
 ### 4. Markdown Export Format
 ```markdown
@@ -74,18 +87,76 @@ treex --export-as txt --save-to simple-tree               # Creates simple-tree.
 \`\`\`
 ```
 
-### 5. Error Handling
+### 5. Error Handling & Output Format
 - Validate export type is supported
-- Check file write permissions
-- Handle filename conflicts
-- Provide clear error messages
-- Graceful fallback behavior
+- Check file write permissions before attempting writes
+- Never overwrite existing files - return "file already exists" error
+- For multiple format exports, display results in sections:
+
+**Success Example:**
+```
+Export Results:
+
+✅ Completed:
+  - my-tree.md
+  - my-tree.txt
+
+❌ Failed:
+  - my-tree.html: File already exists
+```
+
+**All Failed Example:**
+```
+Export Results:
+
+❌ Failed:
+  - my-tree.md: File already exists
+  - my-tree.txt: Permission denied
+```
 
 ### 6. Future Export Types
-- **txt**: Plain text without emojis
+
+Text: 
+- **txt**: Plain text
 - **html**: Styled HTML with CSS
 - **docx**: Microsoft Word document
-- **json**: Structured data format
+
+Image:
+- **png**: Portable Network Graphics
+- **webp**: WebP image format
+
+## Risk Assessment
+
+| Risk | Impact | Probability | Mitigation Strategy |
+|------|--------|-------------|-------------------|
+| Complex CLI option parsing | Medium | Low | Use existing Commander.js patterns from codebase |
+| File permission issues across platforms | High | Medium | Implement comprehensive permission checks before writing |
+| Performance impact on large directories | Medium | Low | Reuse existing scan-folder logic, minimal overhead |
+| Breaking existing CLI behavior | High | Low | Additive-only changes, no modification to existing options |
+| Emoji rendering in different export formats | Low | Medium | Test emoji preservation, document limitations |
+
+## Definition of Done
+
+### Functional Requirements
+- [ ] CLI accepts `--save-to` and `--export-as` options
+- [ ] Markdown export generates properly formatted files
+- [ ] Multiple formats can be exported simultaneously
+- [ ] All existing flags work with export functionality
+- [ ] Console output is suppressed during export
+- [ ] Existing files are never overwritten
+
+### Quality Requirements  
+- [ ] Comprehensive error handling for all failure scenarios
+- [ ] Clear success/failure reporting with specific error messages
+- [ ] No performance regression on existing functionality
+- [ ] Code follows existing patterns and conventions
+- [ ] All edge cases tested (permissions, special characters, etc.)
+
+### Technical Requirements
+- [ ] No breaking changes to existing API
+- [ ] New code integrates cleanly with existing modules
+- [ ] Export functionality is modular and extensible
+- [ ] File operations are atomic (all succeed or all fail gracefully)
 
 ## File Structure Changes
 ```
@@ -102,6 +173,12 @@ commands/
 4. Test with various directory structures
 5. Test integration with existing flags (--collapsed, --folders-only, etc.)
 
+## Related Documents
+- [tasklist.md](./tasklist.md) - Detailed task breakdown and progress tracking
+- [../../README.md](../../README.md) - Project overview and setup
+- [../../commands/scan-folder.js](../../commands/scan-folder.js) - Core tree scanning logic
+- [../../bin/treex.js](../../bin/treex.js) - CLI entry point
+
 ## Implementation Steps
 1. Add CLI options to `bin/treex.js`
 2. Create `commands/export.js` module
@@ -109,3 +186,10 @@ commands/
 4. Implement markdown export format
 5. Add comprehensive error handling
 6. Test all functionality and edge cases
+
+## Success Metrics
+- Feature works with all existing CLI flags without conflicts
+- Export performance adds <100ms overhead for typical directories
+- Zero breaking changes to existing functionality
+- Clear, actionable error messages for all failure scenarios
+- Documentation updated to reflect new capabilities
