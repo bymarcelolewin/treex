@@ -19,6 +19,11 @@ const { launchWithProgress } = require('../puppeteer-helper');
  * @returns {Buffer} PNG binary data with color emojis
  */
 async function format(treeString) {
+  // Disable PNG export on Linux due to rendering issues
+  if (process.platform === 'linux') {
+    throw new Error('Image export not available on Linux at this time');
+  }
+  
   // Generate SVG using the existing SVG exporter
   const svgContent = svgExporter.format(treeString);
   

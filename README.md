@@ -43,7 +43,9 @@ npm link
 
 ### System Requirements
 - **Node.js**: Version 14.0.0 or higher
-- **Chromium**: Automatically downloaded by Puppeteer for PNG/WebP exports
+- **Image exports**: Currently supported on Windows and macOS only
+
+**Note for Linux users:** Image exports (PNG, WebP, SVG) are not available on Linux due to rendering compatibility issues. Markdown export is fully supported on all platforms.
 
 ## ⚡ Quick Start
 
@@ -97,13 +99,15 @@ treex [directory] [options]
 
 TreeX supports multiple export formats with emoji support:
 
-### Image Formats
-- **PNG** (`png`)
-- **WebP** (`webp`)
-- **SVG** (`svg`)
+### Image Formats (Windows & macOS only)
+- **PNG** (`png`) - High-quality raster image
+- **WebP** (`webp`) - Modern compressed format  
+- **SVG** (`svg`) - Vector graphics
 
-### Text Formats
-- **Markdown** (`md`)
+### Text Formats (All platforms)
+- **Markdown** (`md`) - Code blocks with emoji support
+
+**Linux Note:** Image exports are currently disabled on Linux due to compatibility issues.
 
 ## Examples
 

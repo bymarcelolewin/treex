@@ -58,6 +58,11 @@ function estimateTextWidth(text, fontSize) {
  * @returns {string} SVG content
  */
 function format(treeString) {
+  // Disable SVG export on Linux due to rendering issues
+  if (process.platform === 'linux') {
+    throw new Error('Image export not available on Linux at this time');
+  }
+  
   const lines = treeString.split('\n').filter(line => line.trim() !== '');
   
   // Calculate SVG dimensions dynamically based on actual content

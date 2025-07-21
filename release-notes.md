@@ -1,5 +1,19 @@
 # TreeX Release Notes
 
+## v0.0.7 - Disabled Image Exports on Linux
+
+### 🐧 Linux Changes
+- **Disabled image exports** (PNG, WebP, SVG) on Linux due to architecture compatibility issues
+- **Markdown export** remains fully supported on all platforms including Linux
+- **Clear error messages** when attempting image exports on Linux
+
+## v0.0.6 - Architecture Support Improvements
+
+### 🔧 Technical Fixes
+- **Enhanced error handling** for ARM-based Linux systems
+- **Better architecture detection** and user guidance
+- **Improved Chromium installation messages**
+
 ## v0.0.5 - Fixed Linux Export Issues
 
 ### 🐛 Bug Fixes
