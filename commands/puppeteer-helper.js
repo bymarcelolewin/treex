@@ -29,8 +29,24 @@ To install Chromium, please run:
 On some Linux systems, you may need to use sudo:
   sudo npx puppeteer browsers install chrome
 
-Note: Other formats will work without Chromium.`);
+Note: SVG and Markdown exports will work without Chromium.`);
     }
+    
+    if (error.message.includes('Failed to launch the browser process') && 
+        (error.message.includes('ELF: not found') || error.message.includes('Syntax error'))) {
+      throw new Error(`
+🔧 Architecture mismatch: Chromium binary is incompatible with your system architecture.
+
+For ARM-based systems (Raspberry Pi, Apple Silicon), install system Chromium:
+  sudo apt-get install chromium-browser
+
+TreeX will automatically detect and use the system Chromium - no additional setup needed!
+
+Alternative: Use SVG and Markdown exports which don't require Chromium.
+
+For more help: https://pptr.dev/troubleshooting`);
+    }
+    
     throw error;
   }
 }
