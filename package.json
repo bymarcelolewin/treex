@@ -1,6 +1,6 @@
 {
   "name": "treex",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A cross-platform CLI to perform a variety of utilities",
   "license": "MIT",
   "author": "Marcelo Lewin",
@@ -13,6 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "canvas": "^3.1.2",
     "commander": "^11.1.0",
     "module-alias": "^2.2.3"
   },
