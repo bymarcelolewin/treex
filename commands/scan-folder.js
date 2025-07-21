@@ -14,7 +14,7 @@ const emojis = require("@emojis");
 const IGNORED_NAMES = new Set(ignoredNames);
 
 /**
- * Recursively prints a directory tree structure with emojis and optional details
+ * Core tree scanning function - used by both console output and export
  * @param {string} dirPath - The root folder to scan
  * @param {string} prefix - Used internally for formatting
  * @param {boolean} isRoot - Whether this is the initial (top-level) call
@@ -22,15 +22,16 @@ const IGNORED_NAMES = new Set(ignoredNames);
  * @param {Object} options - Additional behavior flags
  * @param {boolean} options.collapsed - Show only the top-level entries
  * @param {boolean} options.foldersOnly - Skip files, show only folders recursively
+ * @returns {string[]} Array of formatted tree lines
  */
-function printTree(dirPath, prefix = "", isRoot = true, showDetails = false, options = {}) {
+function generateTreeLines(dirPath, prefix = "", isRoot = true, showDetails = false, options = {}) {
+  let lines = [];
   let entries;
 
   try {
     entries = fs.readdirSync(dirPath, { withFileTypes: true });
   } catch (err) {
-    console.error(`Error reading ${dirPath}: ${err.message}`);
-    return;
+    return [`Error reading ${dirPath}: ${err.message}`];
   }
 
   entries = entries
@@ -47,7 +48,15 @@ function printTree(dirPath, prefix = "", isRoot = true, showDetails = false, opt
 
   if (isRoot) {
     const folderName = path.basename(path.resolve(dirPath));
-    console.log(`${emojis.folder} ${folderName}`);
+    let locked = "";
+    if (showDetails) {
+      try {
+        fs.accessSync(dirPath, fs.constants.W_OK);
+      } catch {
+        locked = ` ${emojis.locked}`;
+      }
+    }
+    lines.push(`${emojis.folder} ${folderName}${locked}`);
   }
 
   entries.forEach((entry, index) => {
@@ -71,7 +80,7 @@ function printTree(dirPath, prefix = "", isRoot = true, showDetails = false, opt
     }
 
     const line = `${prefix}${isLast ? "└──" : "├──"} ${icon} ${entry.name}${locked}`;
-    console.log(line);
+    lines.push(line);
 
     const shouldRecurse = isFolder && !options.collapsed;
 
@@ -82,12 +91,30 @@ function printTree(dirPath, prefix = "", isRoot = true, showDetails = false, opt
       // Check if we can access the directory before recursing
       try {
         fs.accessSync(subPath, fs.constants.R_OK);
-        printTree(subPath, nextPrefix, false, showDetails, options);
+        const subLines = generateTreeLines(subPath, nextPrefix, false, showDetails, options);
+        lines.push(...subLines);
       } catch (err) {
-        console.log(`${nextPrefix}└── ${emojis.permissionDenied} Permission denied`);
+        lines.push(`${nextPrefix}└── ${emojis.permissionDenied} Permission denied`);
       }
     }
   });
+
+  return lines;
+}
+
+/**
+ * Recursively prints a directory tree structure with emojis and optional details
+ * @param {string} dirPath - The root folder to scan
+ * @param {string} prefix - Used internally for formatting
+ * @param {boolean} isRoot - Whether this is the initial (top-level) call
+ * @param {boolean} showDetails - Whether to show extra metadata like locked
+ * @param {Object} options - Additional behavior flags
+ * @param {boolean} options.collapsed - Show only the top-level entries
+ * @param {boolean} options.foldersOnly - Skip files, show only folders recursively
+ */
+function printTree(dirPath, prefix = "", isRoot = true, showDetails = false, options = {}) {
+  const lines = generateTreeLines(dirPath, prefix, isRoot, showDetails, options);
+  lines.forEach(line => console.log(line));
 }
 
 /**
@@ -179,72 +206,8 @@ function getTreeData(dirPath, options = {}) {
  * @returns {string} The formatted tree string
  */
 function getTreeString(dirPath, prefix = "", isRoot = true, showDetails = false, options = {}) {
-  let output = "";
-  let entries;
-
-  try {
-    entries = fs.readdirSync(dirPath, { withFileTypes: true });
-  } catch (err) {
-    return `Error reading ${dirPath}: ${err.message}`;
-  }
-
-  entries = entries
-    .filter(entry => {
-      if (IGNORED_NAMES.has(entry.name)) return false;
-      if (options.foldersOnly && !entry.isDirectory()) return false;
-      return true;
-    })
-    .sort((a, b) => {
-      if (a.isDirectory() && !b.isDirectory()) return -1;
-      if (!a.isDirectory() && b.isDirectory()) return 1;
-      return a.name.localeCompare(b.name);
-    });
-
-  if (isRoot) {
-    const folderName = path.basename(path.resolve(dirPath));
-    output += `${emojis.folder} ${folderName}\n`;
-  }
-
-  entries.forEach((entry, index) => {
-    const isLast = index === entries.length - 1;
-    const isHidden = entry.name.startsWith(".");
-    const isFolder = entry.isDirectory();
-    const icon = isFolder
-      ? emojis.folder
-      : isHidden
-      ? emojis.hidden
-      : emojis.file;
-
-    let locked = "";
-    if (showDetails) {
-      const fullPath = path.join(dirPath, entry.name);
-      try {
-        fs.accessSync(fullPath, fs.constants.W_OK);
-      } catch {
-        locked = ` ${emojis.locked}`;
-      }
-    }
-
-    const line = `${prefix}${isLast ? "└──" : "├──"} ${icon} ${entry.name}${locked}\n`;
-    output += line;
-
-    const shouldRecurse = isFolder && !options.collapsed;
-
-    if (shouldRecurse) {
-      const nextPrefix = prefix + (isLast ? "    " : "│   ");
-      const subPath = path.join(dirPath, entry.name);
-      
-      // Check if we can access the directory before recursing
-      try {
-        fs.accessSync(subPath, fs.constants.R_OK);
-        output += getTreeString(subPath, nextPrefix, false, showDetails, options);
-      } catch (err) {
-        output += `${nextPrefix}└── ${emojis.permissionDenied} Permission denied\n`;
-      }
-    }
-  });
-
-  return output;
+  const lines = generateTreeLines(dirPath, prefix, isRoot, showDetails, options);
+  return lines.join('\n');
 }
 
 module.exports = printTree;
