@@ -13,9 +13,9 @@ const { getExportType, getSupportedTypes, isTypeSupported } = require("./export-
  * @param {string} treeString - The formatted tree string to export
  * @param {string} filename - Base filename without extension
  * @param {string[]} exportTypes - Array of export types (e.g., ['md', 'txt'])
- * @returns {Object} Export results with completed and failed arrays
+ * @returns {Promise<Object>} Export results with completed and failed arrays
  */
-function exportToFiles(treeString, filename, exportTypes) {
+async function exportToFiles(treeString, filename, exportTypes) {
   const results = {
     completed: [],
     failed: []
@@ -23,7 +23,7 @@ function exportToFiles(treeString, filename, exportTypes) {
 
   for (const type of exportTypes) {
     try {
-      const success = exportSingleFormat(treeString, filename, type);
+      const success = await exportSingleFormat(treeString, filename, type);
       if (success) {
         results.completed.push(`${filename}.${type}`);
       } else {
@@ -42,9 +42,9 @@ function exportToFiles(treeString, filename, exportTypes) {
  * @param {string} treeString - The formatted tree string to export
  * @param {string} filename - Base filename without extension
  * @param {string} type - Export type (e.g., 'md', 'txt')
- * @returns {boolean} Success status
+ * @returns {Promise<boolean>} Success status
  */
-function exportSingleFormat(treeString, filename, type) {
+async function exportSingleFormat(treeString, filename, type) {
   // Get the export type module
   const exportType = getExportType(type);
   if (!exportType) {
@@ -58,8 +58,8 @@ function exportSingleFormat(treeString, filename, type) {
     throw new Error("File already exists");
   }
 
-  // Format content using the export type's formatter
-  const content = exportType.format(treeString);
+  // Format content using the export type's formatter (may be async)
+  const content = await exportType.format(treeString);
 
   // Write file with appropriate encoding
   const encoding = exportType.binary ? null : "utf8";

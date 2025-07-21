@@ -77,11 +77,16 @@ program
         foldersOnly: options.foldersOnly || false
       });
 
-      // Export to files
-      const results = exportToFiles(treeString.trim(), options.saveTo, exportTypes);
-      
-      // Display results
-      displayResults(results);
+      // Export to files (async)
+      exportToFiles(treeString.trim(), options.saveTo, exportTypes)
+        .then(results => {
+          // Display results
+          displayResults(results);
+        })
+        .catch(error => {
+          console.error(`Export error: ${error.message}`);
+          process.exit(1);
+        });
       return;
     }
 

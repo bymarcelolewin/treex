@@ -13,9 +13,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "canvas": "^3.1.2",
     "commander": "^11.1.0",
-    "module-alias": "^2.2.3"
+    "module-alias": "^2.2.3",
+    "puppeteer": "^24.14.0"
   },
   "_moduleAliases": {
     "@ignored": "config/ignored-names.json",

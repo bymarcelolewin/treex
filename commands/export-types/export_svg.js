@@ -24,6 +24,35 @@ function escapeXml(text) {
 }
 
 /**
+ * Estimate text width for monospace font
+ * @param {string} text - Text to measure
+ * @param {number} fontSize - Font size in pixels
+ * @returns {number} Estimated width in pixels
+ */
+function estimateTextWidth(text, fontSize) {
+  // More accurate width calculation for monospace fonts
+  // Account for different character types
+  let width = 0;
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if (char.match(/[📂📄🕶️🔒🚫]/)) {
+      // Emojis are wider
+      width += fontSize * 1.2;
+    } else if (char.match(/[WMm]/)) {
+      // Wide characters
+      width += fontSize * 0.7;
+    } else if (char.match(/[il]/)) {
+      // Narrow characters
+      width += fontSize * 0.5;
+    } else {
+      // Regular monospace characters
+      width += fontSize * 0.65;
+    }
+  }
+  return width;
+}
+
+/**
  * Format tree string as SVG
  * @param {string} treeString - The formatted tree string
  * @returns {string} SVG content
@@ -31,14 +60,15 @@ function escapeXml(text) {
 function format(treeString) {
   const lines = treeString.split('\n').filter(line => line.trim() !== '');
   
-  // Calculate SVG dimensions - ensure no text cutoff
+  // Calculate SVG dimensions dynamically based on actual content
   const fontSize = 16;
-  const lineHeight = fontSize+7; // Make lineHeight = fontSize so lines TOUCH (no gaps)
+  const lineHeight = fontSize + 7;
   const padding = 10;
-  const charWidth = 9.6; // More accurate character width for monospace
-  const maxLineLength = Math.max(...lines.map(line => line.length));
   
-  const svgWidth = (maxLineLength * charWidth) + (padding * 2) + 20; // Extra width to prevent cutoff
+  // Calculate the actual maximum width needed
+  const maxWidth = Math.max(...lines.map(line => estimateTextWidth(line, fontSize)));
+  
+  const svgWidth = maxWidth + (padding * 2) + 20; // Small buffer for safety
   const svgHeight = (lines.length * lineHeight) + (padding * 2);
   
   // Start SVG - no border, exact size
@@ -47,7 +77,7 @@ function format(treeString) {
   <defs>
     <style>
       .tree-text {
-        font: ${fontSize}px 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font: ${fontSize}px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'SF Mono', 'Monaco', 'Consolas', monospace;
         fill: #ffffff;
         dominant-baseline: hanging;
         white-space: pre;
