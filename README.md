@@ -15,6 +15,7 @@ TreeX is a cross-platform CLI tool for visualizing and exporting folder structur
 - 🔍 **Detailed Information** - File permissions, hidden file detection and more
 - 🎯 **Flexible Output** - Console display or export to files
 - 🌍 **Cross-Platform** - Works on Windows, macOS, and Linux
+- **Emoji & Ignore File Management** - Easily manage the emojis displayed and the files and folders to ignore.
 
 ## 🚀 Installation
 
@@ -95,6 +96,14 @@ treex [directory] [options]
 | `--add-ignored <items>` | `-a` | Comma-separated names to add to ignored list |
 | `--remove-ignored <items>` | `-r` | Comma-separated names to remove from ignored list |
 
+### Emoji Management Options
+
+| Option | Short | Description |
+|--------|-------|-------------|
+| `--list-emojis` | `-le` | List current emoji configuration and exit |
+| `--update-emoji <type> <emoji>` | `-ue` | Update emoji for specified type (folder, file, hidden, locked, permissionDenied) |
+| `--restore-emojis` | `-re` | Restore all emojis to default configuration |
+
 ## 📁 Export Formats
 
 TreeX supports multiple export formats with emoji support:
@@ -154,6 +163,25 @@ treex -a "node_modules,.env,dist"
 
 # Remove items from ignore list
 treex -r "temp"
+```
+
+### Emoji Management
+
+```bash
+# Show current emoji configuration
+treex -le
+
+# Update folder emoji
+treex -ue folder "🗂️"
+
+# Update file emoji
+treex -ue file "📋"
+
+# Update hidden file emoji
+treex -ue hidden "👻"
+
+# Restore all emojis to defaults
+treex -re
 ```
 
 ## Sample Output

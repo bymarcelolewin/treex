@@ -12,6 +12,7 @@ const printTree = require("../commands/scan-folder");
 const { getTreeString } = require("../commands/scan-folder");
 const { showIgnoredFiles, addIgnoredFiles, removeIgnoredFiles } = require("../commands/ignored-files");
 const { exportToFiles, displayResults, getSupportedTypes } = require("../commands/export");
+const { listEmojis, updateEmoji, restoreEmojis } = require("../commands/emoji-management");
 const packageJson = require("../package.json");
 
 const program = new Command();
@@ -30,6 +31,9 @@ program
   .option("-s, --show-ignored", "List currently ignored files/folders and exit")
   .option("-a, --add-ignored <items>", "Comma-separated names to add to ignored list")
   .option("-r, --remove-ignored <items>", "Comma-separated names to remove from ignored list")
+  .option("-le, --list-emojis", "List current emoji configuration and exit")
+  .option("-ue, --update-emoji <type> <emoji>", "Update emoji for specified type (folder, file, hidden, locked, permissionDenied)")
+  .option("-re, --restore-emojis", "Restore all emojis to default configuration")
   .option("-S, --save-to <filename>", "Export filename without extension")
   .option("-E, --export-as <types>", "Export format(s) - comma-separated (md, txt, etc.)")
   .action((dir, options) => {
@@ -47,6 +51,33 @@ program
     if (options.removeIgnored) {
       const names = options.removeIgnored.split(",").map(x => x.trim());
       removeIgnoredFiles(names);
+      return;
+    }
+
+    if (options.listEmojis) {
+      listEmojis();
+      return;
+    }
+
+    if (options.updateEmoji) {
+      // Commander.js should handle the two arguments, but we need to extract them
+      const args = process.argv.slice(2);
+      const ueIndex = args.findIndex(arg => arg === '-ue' || arg === '--update-emoji');
+      if (ueIndex !== -1 && args[ueIndex + 1] && args[ueIndex + 2]) {
+        const type = args[ueIndex + 1];
+        const emoji = args[ueIndex + 2];
+        updateEmoji(type, emoji);
+      } else {
+        console.error("Error: --update-emoji requires both type and emoji arguments");
+        console.error("Usage: treex -ue <type> <emoji>");
+        console.error("Valid types: folder, file, hidden, locked, permissionDenied");
+        process.exit(1);
+      }
+      return;
+    }
+
+    if (options.restoreEmojis) {
+      restoreEmojis();
       return;
     }
 

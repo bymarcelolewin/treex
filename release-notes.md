@@ -1,5 +1,39 @@
 # TreeX Release Notes
 
+## v1.0.0 - Emoji Management System
+
+### 🎨 NEW: Emoji Customization
+- **List current emojis** with `-le` flag - see all configured emoji types and symbols
+- **Update individual emojis** with `-ue <type> <emoji>` - customize folder, file, hidden, locked, and permissionDenied emojis
+- **Restore default emojis** with `-re` flag - reset all customizations back to original settings
+- **Emoji validation** - prevents invalid characters, only accepts actual emoji symbols
+- **Error handling** - clear messages for invalid emoji types and non-emoji input
+
+### 🔧 Technical Implementation  
+- **New emoji management module** (`commands/emoji-management.js`) with full CRUD operations
+- **Backup system** - `config/emojis-default.json` preserves original emoji configuration
+- **CLI integration** - seamless addition to existing command structure
+- **Type validation** - ensures only valid emoji types can be updated
+- **Regex-based emoji validation** - robust checking for actual emoji characters
+
+### 📚 Documentation Updates
+- **Comprehensive README updates** with new Emoji Management Options section
+- **Usage examples** for all three new emoji management commands
+- **CLI help integration** - all new options automatically appear in `--help` output
+
+### 🎯 User Experience
+```bash
+# Quick emoji management examples
+treex -le                    # List current emoji configuration  
+treex -ue folder "🗂️"       # Update folder emoji
+treex -ue file "📋"         # Update file emoji
+treex -re                    # Restore all defaults
+```
+
+This major release introduces the first customization system to TreeX, allowing users to personalize their tree output while maintaining the reliability and functionality of existing features.
+
+---
+
 ## v0.0.7 - Disabled Image Exports on Linux
 
 ### 🐧 Linux Changes
