@@ -2,7 +2,7 @@
 
 TreeX is a cross-platform CLI tool for visualizing and exporting folder structures. It provides emoji-based directory trees with extensive export capabilities to multiple formats text documents and images.
 
-[![npm version](https://badge.fury.io/js/@icodewith-ai%2Ftreex.svg)](https://badge.fury.io/js/@icodewith-ai%2Ftreex)
+[![npm version](https://img.shields.io/npm/v/@icodewith-ai/treex.svg)](https://www.npmjs.com/package/@icodewith-ai/treex)
 [![Website](https://img.shields.io/badge/website-iCodeWith.ai-blue?style=flat&logo=world&logoColor=white)](https://icodewith.ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
