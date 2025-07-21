@@ -1,7 +1,7 @@
 {
   "name": "@icodewith-ai/treex",
   "version": "1.0.0",
-  "description": "Advanced tree structure visualizer & exporter with emoji support",
+  "description": "A cross-platform CLI for visualizing and exporting folder structures",
   "license": "MIT",
   "author": {
     "name": "Marcelo Lewin",
@@ -48,7 +48,9 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
     "commander": "^11.1.0",
+    "figlet": "^1.8.2",
     "module-alias": "^2.2.3",
     "puppeteer": "^24.14.0"
   },

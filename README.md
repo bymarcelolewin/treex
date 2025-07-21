@@ -15,7 +15,8 @@ TreeX is a cross-platform CLI tool for visualizing and exporting folder structur
 - 🔍 **Detailed Information** - File permissions, hidden file detection and more
 - 🎯 **Flexible Output** - Console display or export to files
 - 🌍 **Cross-Platform** - Works on Windows, macOS, and Linux
-- **Emoji & Ignore File Management** - Easily manage the emojis displayed and the files and folders to ignore.
+- 🎨 **Emoji Management** - Customize folder, file, and status emojis with easy list, update, and restore commands
+- 📝 **Ignore File Management** - Configure which files and folders to exclude from tree display
 
 ## 🚀 Installation
 
@@ -53,6 +54,9 @@ npm link
 ```bash
 # Basic usage - scan current directory
 treex
+
+# Show help with styled interface  
+treex --help
 
 # Scan specific directory
 treex ./my-project
@@ -286,6 +290,8 @@ treex/
 │   │   ├── export_svg.js     # SVG exporter
 │   │   ├── export_png.js     # PNG exporter (Puppeteer)
 │   │   └── export_webp.js    # WebP exporter (Puppeteer)
+│   ├── emoji-management.js   # Emoji customization system
+│   ├── cli-styling.js        # CLI styling with Figlet and Chalk
 │   ├── ignored-files.js      # Ignore list management
 │   └── scan-folder.js        # Core scanning logic
 ├── config/
@@ -296,6 +302,8 @@ treex/
 
 ### Dependencies
 - **commander** - CLI framework and argument parsing
+- **figlet** - ASCII art text generation for stylized headers
+- **chalk** - Terminal text styling and colorization
 - **puppeteer** - Headless browser for color emoji rendering
 - **module-alias** - Clean import paths (`@emojis`, `@ignored`)
 

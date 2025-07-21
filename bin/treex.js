@@ -13,14 +13,19 @@ const { getTreeString } = require("../commands/scan-folder");
 const { showIgnoredFiles, addIgnoredFiles, removeIgnoredFiles } = require("../commands/ignored-files");
 const { exportToFiles, displayResults, getSupportedTypes } = require("../commands/export");
 const { listEmojis, updateEmoji, restoreEmojis } = require("../commands/emoji-management");
+const { createHelpFormatter } = require("../commands/cli-styling");
 const packageJson = require("../package.json");
 
 const program = new Command();
 
 program
   .name("treex")
-  .description("TreeX v" + packageJson.version + "\nA cross-platform CLI for visualizing and exporting folder structures\nCreated by Marcelo Lewin from iCodeWith.ai.")
-  .version(packageJson.version);
+  .description(packageJson.description)
+  .version(packageJson.version)
+  .helpOption('-h, --help', 'display help for command')
+  .configureHelp({
+    formatHelp: createHelpFormatter()
+  });
 
 program
 program

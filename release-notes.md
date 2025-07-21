@@ -1,5 +1,35 @@
 # TreeX Release Notes
 
+## v1.0.1 - Enhanced CLI Styling
+
+### 🎨 Visual Enhancements
+- **NEW: Styled ASCII Banner** - TreeX now displays as large green ASCII art using Figlet
+- **Colored Command Interface** - All command flags appear in green for easy identification
+- **Professional Help Output** - Clean white text for descriptions and help content
+- **Cross-Platform Colors** - Automatic color detection with graceful fallback for terminals without color support
+
+### 🔧 Technical Implementation
+- **Added Figlet dependency** - ASCII art text generation for stylized headers
+- **Added Chalk dependency (v4.1.2)** - Terminal text styling and colorization with CommonJS compatibility
+- **Custom help formatter** - Built specifically for Commander.js with proper styling integration
+- **Smart color handling** - Respects NO_COLOR environment variable for accessibility
+
+### 🎯 User Experience
+```bash
+# The new styled help interface
+treex --help
+# Shows beautiful green ASCII banner with colored command options
+```
+
+### 📚 Documentation Updates
+- **Updated README** with new dependencies (figlet, chalk)
+- **Enhanced Quick Start** section with styled help example
+- **Updated project structure** documentation to reflect new CLI styling module
+
+This release focuses on improving the visual appeal and professional appearance of TreeX while maintaining full functionality and compatibility across all supported platforms.
+
+---
+
 ## v1.0.0 - Emoji Management System
 
 ### 🎨 NEW: Emoji Customization
