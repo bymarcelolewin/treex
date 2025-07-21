@@ -33,7 +33,7 @@ function format(treeString) {
   
   // Calculate SVG dimensions - ensure no text cutoff
   const fontSize = 16;
-  const lineHeight = fontSize + 2; // Small gap between lines like console
+  const lineHeight = fontSize+7; // Make lineHeight = fontSize so lines TOUCH (no gaps)
   const padding = 10;
   const charWidth = 9.6; // More accurate character width for monospace
   const maxLineLength = Math.max(...lines.map(line => line.length));
@@ -48,15 +48,15 @@ function format(treeString) {
     <style>
       .tree-text {
         font: ${fontSize}px 'SF Mono', 'Monaco', 'Consolas', monospace;
-        fill: #000000;
+        fill: #ffffff;
         dominant-baseline: hanging;
         white-space: pre;
       }
     </style>
   </defs>
   
-  <!-- Clean white background, no border -->
-  <rect width="100%" height="100%" fill="#ffffff"/>
+  <!-- Clean black background, no border -->
+  <rect width="100%" height="100%" fill="#000000"/>
   
 `;
 
