@@ -1,6 +1,6 @@
 {
   "name": "@icodewith-ai/treex",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Advanced tree structure visualizer & exporter with emoji support",
   "license": "MIT",
   "author": {
