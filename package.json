@@ -1,6 +1,6 @@
 {
   "name": "@icodewith-ai/treex",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A cross-platform CLI for visualizing and exporting folder structures",
   "license": "MIT",
   "author": {
