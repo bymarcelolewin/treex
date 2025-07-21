@@ -63,23 +63,22 @@ function generateTreeLines(dirPath, prefix = "", isRoot = true, showDetails = fa
     const isLast = index === entries.length - 1;
     const isHidden = entry.name.startsWith(".");
     const isFolder = entry.isDirectory();
-    const icon = isFolder
-      ? emojis.folder
-      : isHidden
-      ? emojis.hidden
-      : emojis.file;
+    const icon = isFolder ? emojis.folder : emojis.file;
 
-    let locked = "";
+    let details = "";
     if (showDetails) {
       const fullPath = path.join(dirPath, entry.name);
       try {
         fs.accessSync(fullPath, fs.constants.W_OK);
       } catch {
-        locked = ` ${emojis.locked}`;
+        details += ` ${emojis.locked}`;
+      }
+      if (isHidden) {
+        details += ` ${emojis.hidden}`;
       }
     }
 
-    const line = `${prefix}${isLast ? "└──" : "├──"} ${icon} ${entry.name}${locked}`;
+    const line = `${prefix}${isLast ? "└──" : "├──"} ${icon} ${entry.name}${details}`;
     lines.push(line);
 
     const shouldRecurse = isFolder && !options.collapsed;
@@ -175,7 +174,7 @@ function getTreeData(dirPath, options = {}) {
         isDirectory: isFolder,
         isHidden,
         locked,
-        icon: isFolder ? emojis.folder : (isHidden ? emojis.hidden : emojis.file)
+        icon: isFolder ? emojis.folder : emojis.file
       };
 
       if (isFolder && !options.collapsed) {

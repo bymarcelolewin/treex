@@ -18,7 +18,7 @@ const program = new Command();
 
 program
   .name("treex")
-  .description("🌲 TreeX — A cross-platform CLI for visualizing folder structures")
+  .description("TreeX v" + packageJson.version + "\nA cross-platform CLI for visualizing and exporting folder structures\nCreated by Marcelo Lewin from iCodeWith.ai.")
   .version(packageJson.version);
 
 program
@@ -30,8 +30,8 @@ program
   .option("-s, --show-ignored", "List currently ignored files/folders and exit")
   .option("-a, --add-ignored <items>", "Comma-separated names to add to ignored list")
   .option("-r, --remove-ignored <items>", "Comma-separated names to remove from ignored list")
-  .option("--save-to <filename>", "Export filename without extension")
-  .option("--export-as <types>", "Export format(s) - comma-separated (md, txt, etc.)")
+  .option("-S, --save-to <filename>", "Export filename without extension")
+  .option("-E, --export-as <types>", "Export format(s) - comma-separated (md, txt, etc.)")
   .action((dir, options) => {
     if (options.showIgnored) {
       showIgnoredFiles();
