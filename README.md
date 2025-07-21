@@ -23,6 +23,11 @@ TreeX is a cross-platform CLI tool for visualizing and exporting folder structur
 npm install -g @icodewith-ai/treex
 ```
 
+**Note for Linux users:** You may need to use `sudo`:
+```bash
+sudo npm install -g @icodewith-ai/treex
+```
+
 ### Option 2: Development Installation
 ```bash
 # Clone the repository
