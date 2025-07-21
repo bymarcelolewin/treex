@@ -1,28 +1,29 @@
 # TreeX - Advanced Tree Structure Visualizer & Exporter
 
-TreeX is a cross-platform CLI tool for visualizing and exporting folder structures. It provides emoji-based directory trees with extensive export capabilities to multiple formats including images with full color emoji support.
+TreeX is a cross-platform CLI tool for visualizing and exporting folder structures. It provides emoji-based directory trees with extensive export capabilities to multiple formats text documents and images.
+
+[![npm version](https://badge.fury.io/js/@icodewith-ai%2Ftreex.svg)](https://badge.fury.io/js/@icodewith-ai%2Ftreex)
+[![Website](https://img.shields.io/badge/website-iCodeWith.ai-blue?style=flat&logo=world&logoColor=white)](https://icodewith.ai)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
 
 ## Features
 
 - 🎨 **Emoji Display** - Folder 📂, file 📄, hidden 🫥, and locked 🔒 icons
 - 📤 **Multi-Format Export** - SVG, PNG, WebP, and Markdown with perfect emoji rendering
 - ⚡ **Smart Filtering** - Configurable ignore lists and display options
-- 🔍 **Detailed Information** - File permissions and hidden file detection
+- 🔍 **Detailed Information** - File permissions, hidden file detection and more
 - 🎯 **Flexible Output** - Console display or export to files
 - 🌍 **Cross-Platform** - Works on Windows, macOS, and Linux
 
-## 📋 Table of Contents
-
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Command Reference](#command-reference)
-- [Export Formats](#export-formats)
-- [Examples](#examples)
-- [Configuration](#configuration)
-- [Development](#development)
-
 ## 🚀 Installation
 
+### Option 1: Install from NPM (Recommended)
+```bash
+npm install -g @icodewith-ai/treex
+```
+
+### Option 2: Development Installation
 ```bash
 # Clone the repository
 git clone https://github.com/icodewith-ai/treex.git
@@ -34,6 +35,10 @@ npm install
 # Make it globally available
 npm link
 ```
+
+### System Requirements
+- **Node.js**: Version 14.0.0 or higher
+- **Chromium**: Automatically downloaded by Puppeteer for PNG/WebP exports
 
 ## ⚡ Quick Start
 
@@ -75,7 +80,7 @@ treex [directory] [options]
 | `--export-as <types>` | `-E` | Export format(s) - comma-separated (md, svg, png, webp) |
 | `--save-to <filename>` | `-S` | Export filename without extension |
 
-### File Management Options
+### File / Folder Ignore Management Options
 
 | Option | Short | Description |
 |--------|-------|-------------|
@@ -87,13 +92,13 @@ treex [directory] [options]
 
 TreeX supports multiple export formats with emoji support:
 
-### Image Formats (Color Emojis)
-- **PNG** (`png`) - High-quality raster image with full color emojis
-- **WebP** (`webp`) - Modern compressed format with full color emojis
-- **SVG** (`svg`) - Vector graphics with perfect emoji support (recommended)
+### Image Formats
+- **PNG** (`png`)
+- **WebP** (`webp`)
+- **SVG** (`svg`)
 
 ### Text Formats
-- **Markdown** (`md`) - Code blocks with emoji support for documentation
+- **Markdown** (`md`)
 
 ## Examples
 
@@ -113,7 +118,7 @@ treex -c ./my-project
 treex -f ./my-project
 ```
 
-### Export Examples
+### Exporting
 
 ```bash
 # Export to single format
@@ -129,7 +134,7 @@ treex -E webp -S ./exports/collapsed-view -c ./my-project
 treex -E "svg,md" -S detailed-tree -d ./my-project
 ```
 
-### File Management
+### File / Folder Ignore Management
 
 ```bash
 # Show what's currently ignored
@@ -212,6 +217,24 @@ Default ignored items in `config/ignored-names.json`:
 ]
 ```
 
+### Glob Pattern Support
+
+```bash
+# Add pattern to ignore all text files starting with "test"
+treex -a "test*.*"
+
+# Add pattern to ignore all .tmp files
+treex -a "*.tmp"
+
+# Add pattern to match single character
+treex -a "temp?.log"
+```
+
+Supported patterns:
+- `*` matches any characters (e.g., `*.log` matches `app.log`, `error.log`)
+- `?` matches single character (e.g., `test?.txt` matches `test1.txt`, `testa.txt`)
+- Case insensitive matching
+
 ## 🛠️ Development
 
 ### Project Structure
@@ -246,32 +269,17 @@ treex/
 2. Export an object with: `{ format, extension, description, name, binary, contentType }`
 3. The system auto-discovers new formats
 
-## 🔧 Technical Details
+## Release Notes
 
-### Performance
-- **Console output**: ~50ms for typical projects
-- **SVG export**: ~100ms (lightweight vector)
-- **PNG/WebP export**: ~900ms (Puppeteer rendering)
-
-### Emoji Rendering
-- **Console/SVG**: Native system emoji fonts
-- **PNG/WebP**: Puppeteer with Chrome's emoji rendering
-- **Markdown**: Preserved as Unicode characters
-
-### File Size Comparison
-- **SVG**: ~2-5KB (vector, smallest)
-- **WebP**: ~20-30KB (compressed, good quality)
-- **PNG**: ~30-40KB (uncompressed, highest quality)
+See [release-notes.md](release-notes.md) for detailed information about what's new in each version.
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT License - see [LICENSE](./LICENSE) file for details.
 
 ## About
 
 Created by Marcelo Lewin from [iCodeWith.ai](https://icodewith.ai)
-
-TreeX v0.0.2 - A powerful directory visualization and export tool.
 
 
 ## Issues

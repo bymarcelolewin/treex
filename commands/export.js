@@ -16,6 +16,8 @@ const { getExportType, getSupportedTypes, isTypeSupported } = require("./export-
  * @returns {Promise<Object>} Export results with completed and failed arrays
  */
 async function exportToFiles(treeString, filename, exportTypes) {
+  console.log('📤 Creating exports...');
+  
   const results = {
     completed: [],
     failed: []

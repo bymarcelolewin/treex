@@ -1,16 +1,51 @@
 {
-  "name": "treex",
+  "name": "@icodewith-ai/treex",
   "version": "0.0.2",
-  "description": "A cross-platform CLI to perform a variety of utilities",
+  "description": "Advanced tree structure visualizer & exporter with emoji support",
   "license": "MIT",
-  "author": "Marcelo Lewin",
+  "author": {
+    "name": "Marcelo Lewin",
+    "url": "https://icodewith.ai"
+  },
   "type": "commonjs",
   "main": "bin/treex.js",
   "bin": {
     "treex": "./bin/treex.js"
   },
+  "files": [
+    "bin/",
+    "commands/",
+    "config/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release:patch": "npm version patch && npm publish && git push && git push --tags && git checkout dev && git merge main && git push",
+    "release:minor": "npm version minor && npm publish && git push && git push --tags && git checkout dev && git merge main && git push",
+    "release:major": "npm version major && npm publish && git push && git push --tags && git checkout dev && git merge main && git push"
+  },
+  "keywords": [
+    "cli",
+    "tree",
+    "directory",
+    "visualization",
+    "export",
+    "svg",
+    "png",
+    "markdown",
+    "emoji"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/icodewith-ai/treex.git"
+  },
+  "homepage": "https://icodewith.ai",
+  "bugs": {
+    "url": "https://github.com/icodewith-ai/treex/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   },
   "dependencies": {
     "commander": "^11.1.0",

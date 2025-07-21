@@ -14,6 +14,36 @@ const emojis = require("@emojis");
 const IGNORED_NAMES = new Set(ignoredNames);
 
 /**
+ * Check if a filename matches any of the ignored patterns (supports glob patterns)
+ * @param {string} filename - The filename to check
+ * @returns {boolean} True if the file should be ignored
+ */
+function isIgnored(filename) {
+  // Check exact matches first (for backward compatibility)
+  if (IGNORED_NAMES.has(filename)) {
+    return true;
+  }
+  
+  // Check glob patterns
+  for (const pattern of ignoredNames) {
+    if (pattern.includes('*') || pattern.includes('?')) {
+      // Convert glob pattern to regex
+      const regexPattern = pattern
+        .replace(/\./g, '\\.')  // Escape dots
+        .replace(/\*/g, '.*')   // * matches any characters
+        .replace(/\?/g, '.');   // ? matches single character
+      
+      const regex = new RegExp(`^${regexPattern}$`, 'i'); // Case insensitive
+      if (regex.test(filename)) {
+        return true;
+      }
+    }
+  }
+  
+  return false;
+}
+
+/**
  * Core tree scanning function - used by both console output and export
  * @param {string} dirPath - The root folder to scan
  * @param {string} prefix - Used internally for formatting
@@ -36,7 +66,7 @@ function generateTreeLines(dirPath, prefix = "", isRoot = true, showDetails = fa
 
   entries = entries
     .filter(entry => {
-      if (IGNORED_NAMES.has(entry.name)) return false;
+      if (isIgnored(entry.name)) return false;
       if (options.foldersOnly && !entry.isDirectory()) return false;
       return true;
     })
@@ -136,7 +166,7 @@ function getTreeData(dirPath, options = {}) {
 
     entries = entries
       .filter(entry => {
-        if (IGNORED_NAMES.has(entry.name)) return false;
+        if (isIgnored(entry.name)) return false;
         if (options.foldersOnly && !entry.isDirectory()) return false;
         return true;
       })

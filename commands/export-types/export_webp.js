@@ -6,6 +6,7 @@
 
 const puppeteer = require('puppeteer');
 const svgExporter = require('./export_svg');
+const { launchWithProgress } = require('../puppeteer-helper');
 
 /**
  * WebP Color Export Type
@@ -23,11 +24,8 @@ async function format(treeString) {
   
   let browser;
   try {
-    // Launch headless browser
-    browser = await puppeteer.launch({ 
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    // Launch headless browser with progress feedback
+    browser = await launchWithProgress();
     
     const page = await browser.newPage();
     
