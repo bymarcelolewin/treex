@@ -1,5 +1,19 @@
 # TreeX Release Notes
 
+## v0.0.5 - Fixed Linux Export Issues
+
+### 🐛 Bug Fixes
+- **Fixed duplicate error messages** when multiple Chromium-dependent formats (PNG + WebP) fail
+- **Enhanced result display** to always show both successful and failed exports
+- **Improved error grouping** with single detailed Chromium installation message
+
+## v0.0.4 - Enhanced Linux Support
+
+### 🐧 Linux Improvements
+- **Friendly error messages** for missing Chromium on Linux systems
+- **Clear installation guidance** with sudo instructions for Linux users
+- **Updated documentation** with Linux-specific installation notes
+
 ## v0.0.3 - NPM Package & Enhancements
 
 ### 📦 NPM Package Publication
