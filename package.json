@@ -1,5 +1,5 @@
 {
-  "name": "@icodewith-ai/treex",
+  "name": "@bymarcelolewin/treex",
   "version": "1.0.1",
   "description": "A cross-platform CLI for visualizing and exporting folder structures",
   "license": "MIT",
@@ -21,9 +21,9 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "release:patch": "npm version patch && npm publish --access public && git push && git push --tags && git checkout dev && git merge main && git push",
-    "release:minor": "npm version minor && npm publish --access public && git push && git push --tags && git checkout dev && git merge main && git push",
-    "release:major": "npm version major && npm publish --access public && git push && git push --tags && git checkout dev && git merge main && git push"
+    "release:patch": "git checkout main && git pull && git merge dev && npm version patch && npm publish --access public && git push && git push --tags && git checkout dev && git merge main && git push",
+    "release:minor": "git checkout main && git pull && git merge dev && npm version minor && npm publish --access public && git push && git push --tags && git checkout dev && git merge main && git push",
+    "release:major": "git checkout main && git pull && git merge dev && npm version major && npm publish --access public && git push && git push --tags && git checkout dev && git merge main && git push"
   },
   "keywords": [
     "cli",
@@ -38,11 +38,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/icodewith-ai/treex.git"
+    "url": "https://github.com/bymarcelolewin/treex.git"
   },
   "homepage": "https://icodewith.ai",
   "bugs": {
-    "url": "https://github.com/icodewith-ai/treex/issues"
+    "url": "https://github.com/bymarcelolewin/treex/issues"
   },
   "engines": {
     "node": ">=14.0.0"

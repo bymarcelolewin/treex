@@ -2,21 +2,21 @@
 
 TreeX is a cross-platform CLI tool for visualizing and exporting folder structures. It provides emoji-based directory trees with extensive export capabilities to multiple formats text documents and images.
 
-[![npm version](https://img.shields.io/npm/v/@icodewith-ai/treex.svg)](https://www.npmjs.com/package/@icodewith-ai/treex)
+[![npm version](https://img.shields.io/npm/v/@bymarcelolewin/treex.svg)](https://www.npmjs.com/package/@bymarcelolewin/treex)
 [![Website](https://img.shields.io/badge/website-iCodeWith.ai-blue?style=flat&logo=world&logoColor=white)](https://icodewith.ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 
 ## Features
 
-- 🎨 **Emoji Display** - Folder 📂, file 📄, hidden 🫥, and locked 🔒 icons
-- 📤 **Multi-Format Export** - SVG, PNG, WebP, and Markdown with perfect emoji rendering
-- ⚡ **Smart Filtering** - Configurable ignore lists and display options
-- 🔍 **Detailed Information** - File permissions, hidden file detection and more
-- 🎯 **Flexible Output** - Console display or export to files
-- 🌍 **Cross-Platform** - Works on Windows, macOS, and Linux
-- 🎨 **Emoji Management** - Customize folder, file, and status emojis with easy list, update, and restore commands
-- 📝 **Ignore File Management** - Configure which files and folders to exclude from tree display
+- **Emoji Display** - Folder 📂, file 📄, hidden 🫥, and locked 🔒 icons
+- **Multi-Format Export** - SVG, PNG, WebP, and Markdown with perfect emoji rendering
+- **Smart Filtering** - Configurable ignore lists and display options
+- **Detailed Information** - File permissions, hidden file detection and more
+- **Flexible Output** - Console display or export to files
+- **Cross-Platform** - Works on Windows, macOS, and Linux
+- **Emoji Management** - Customize folder, file, and status emojis with easy list, update, and restore commands
+- **Ignore File Management** - Configure which files and folders to exclude from tree display
 
 ## 🚀 Installation
 
